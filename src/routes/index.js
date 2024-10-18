@@ -1,8 +1,10 @@
 const express = require("express");
-const typeRouter = require("./type");
+const carsRouter = require("./cars");
+const modelsRouter = require("./models")
 
 const router = express.Router();
 
-router.use("/type", typeRouter);
+router.use("/cars", carsRouter);
+router.use("/models", modelsRouter);
 
 module.exports = router;
