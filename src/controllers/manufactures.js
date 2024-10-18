@@ -1,63 +1,52 @@
 const manufactureService = require("../services/manufactures");
 const { successResponse } = require("../utils/response");
+const { NotFoundError } = require("../utils/request");
 
-// Fetch all manufactures
+// Get all manufactures
 exports.getManufactures = async (req, res, next) => {
-  try {
-    const manufactures = await manufactureService.getManufactures();
-    return successResponse(res, 200, manufactures);
-  } catch (error) {
-    next(error);
+  const data = await manufactureService.getManufactures(req);
+  if (!data.length) {
+    throw new NotFoundError("No manufactures found");
   }
+  successResponse(res, data, "Successfully fetched all manufactures");
 };
 
-// Fetch manufacture by ID
+// Get manufacture by ID
 exports.getManufactureById = async (req, res, next) => {
-  try {
-    const manufacture = await manufactureService.getManufactureById(
-      req.params.id
-    );
-    return successResponse(res, 200, manufacture);
-  } catch (error) {
-    next(error);
+  const { id } = req.params;
+  const data = await manufactureService.getManufactureById(id);
+  if (!data) {
+    throw new NotFoundError("Manufacture not found");
   }
+  successResponse(res, data, "Successfully fetched manufacture");
 };
 
 // Create a new manufacture
 exports.createManufacture = async (req, res, next) => {
-  try {
-    const manufacture = await manufactureService.createManufacture(
-      req.body,
-      req.files
-    );
-    return successResponse(res, 201, manufacture);
-  } catch (error) {
-    next(error);
-  }
+  const data = await manufactureService.createManufacture(req.body, req.files);
+  successResponse(res, data, "Successfully created manufacture");
 };
 
-// Update a manufacture
+// Update manufacture by ID
 exports.updateManufacture = async (req, res, next) => {
-  try {
-    const manufacture = await manufactureService.updateManufacture(
-      req.params.id,
-      req.body,
-      req.files
-    );
-    return successResponse(res, 200, manufacture);
-  } catch (error) {
-    next(error);
+  const { id } = req.params;
+  const data = await manufactureService.updateManufacture(
+    id,
+    req.body,
+    req.files
+  );
+  if (!data) {
+    throw new NotFoundError("Manufacture not found for update");
   }
+  successResponse(res, data, "Successfully updated manufacture");
 };
 
-// Delete a manufacture
+// Delete manufacture by ID
 exports.deleteManufactureById = async (req, res, next) => {
-  try {
-    const manufacture = await manufactureService.deleteManufactureById(
-      req.params.id
-    );
-    return successResponse(res, 200, manufacture);
-  } catch (error) {
-    next(error);
+  const { id } = req.params;
+  const data = await manufactureService.deleteManufactureById(id);
+  if (!data) {
+    throw new NotFoundError("Manufacture not found for deletion");
   }
+  successResponse(res, data, "Successfully deleted manufacture");
 };

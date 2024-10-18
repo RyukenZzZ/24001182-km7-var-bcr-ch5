@@ -1,36 +1,59 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const JSONBigInt = require("json-bigint");
 
 // Fetch all manufactures
 exports.getManufactures = async () => {
-  return await prisma.manufactures.findMany();
+  const manufacturesData = await prisma.manufactures.findMany();
+  if (!manufacturesData) {
+    return null;
+  }
+  const serializedData = JSONBigInt.stringify(manufacturesData);
+  return JSONBigInt.parse(serializedData);
 };
 
 // Fetch manufacture by ID
 exports.getManufactureById = async (id) => {
-  return await prisma.manufactures.findUnique({
-    where: { id },
+  const manufactureData = await prisma.manufactures.findUnique({
+    where: {
+      id: Number(id),
+    },
   });
+  if (!manufactureData) {
+    return null;
+  }
+  const serializedData = JSONBigInt.stringify(manufactureData);
+  return JSONBigInt.parse(serializedData);
 };
 
 // Create a new manufacture
 exports.createManufacture = async (data) => {
-  return await prisma.manufactures.create({
+  const newManufacture = await prisma.manufactures.create({
     data,
   });
+  const serializedData = JSONBigInt.stringify(newManufacture);
+  return JSONBigInt.parse(serializedData);
 };
 
 // Update manufacture by ID
 exports.updateManufacture = async (id, data) => {
-  return await prisma.manufactures.update({
-    where: { id },
+  const updatedManufacture = await prisma.manufactures.update({
+    where: {
+      id: Number(id),
+    },
     data,
   });
+  const serializedData = JSONBigInt.stringify(updatedManufacture);
+  return JSONBigInt.parse(serializedData);
 };
 
 // Delete manufacture by ID
 exports.deleteManufactureById = async (id) => {
-  return await prisma.manufactures.delete({
-    where: { id },
+  const deletedManufacture = await prisma.manufactures.delete({
+    where: {
+      id: Number(id),
+    },
   });
+  const serializedData = JSONBigInt.stringify(deletedManufacture);
+  return JSONBigInt.parse(serializedData);
 };
