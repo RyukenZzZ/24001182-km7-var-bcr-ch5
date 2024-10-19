@@ -42,6 +42,7 @@ exports.validateCreateModel = (req, res, next) => {
   const validateBody = z.object({
     name: z.string(),
     description: z.string(),
+    manufacture_id: z.string(),
   });
 
   const result = validateBody.safeParse(req.body);
@@ -74,7 +75,7 @@ exports.validateUpdateModel = (req, res, next) => {
     // Validation body schema
     const validateBody = z.object({
       name: z.string(),
-      description:z.string(),
+      manufacture_id: z.string(),
     });
   
     // Validate

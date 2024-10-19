@@ -5,7 +5,11 @@ const prisma = new PrismaClient();
 
 exports.getModels = async (name) => {
     // Define Query
-    let query = {};
+    let query = {
+        include: {
+            manufactures: true,
+        },
+    };
 
     let orQuery =[];
     if(name){
@@ -35,6 +39,9 @@ exports.getModelById = async (id) => {
         where: {
             id: id,
         },
+        include: {
+            manufactures: true,
+        },
     });
 
     // Convert BigInt fields to string for safe serialization
@@ -44,7 +51,10 @@ exports.getModelById = async (id) => {
 
 exports.createModel = async (data) => {
     const newModel = await prisma.models.create({
-        data
+        data,
+        include: {
+            manufactures: true,
+        },
     });
 
     // Convert BigInt fields to string for safe serialization
@@ -55,10 +65,16 @@ exports.createModel = async (data) => {
 exports.updateModel = async (id, data) => {
     
     const updatedModel = await prisma.models.update({
-        where: { id: id }, // ID model yang ingin diperbarui
-        data
-    });
-    
+        where: {
+            id: id, // ID dari model yang ingin diperbarui
+        },
+        data: {
+            manufacture_id: BigInt(data.manufacture_id), // Ubah ke BigInt jika dibutuhkan
+        },
+        include: {
+            manufactures: true, // Sertakan relasi jika perlu
+        },
+    });    
 
     // Convert BigInt fields to string for safe serialization
     const serializedModels = JSONBigInt.stringify(updatedModel);
@@ -68,6 +84,9 @@ exports.updateModel = async (id, data) => {
 exports.deleteModelById = async (id) => {
     const deletedModel = await prisma.models.delete({
         where: {id},
+        include: {
+            manufactures: true,
+        },
     });
 
     // Convert BigInt fields to string for safe serialization
