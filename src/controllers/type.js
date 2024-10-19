@@ -7,7 +7,7 @@ exports.getCarsType = async (req, res, next) => {
   if (!data.length) {
     throw new NotFoundError(`Cars type not found`);
   }
-  successResponse(res, data);
+  successResponse(res, data, `Successfully fetched cars type`);
 };
 
 exports.getCarsTypeById = async (req, res, next) => {
@@ -15,12 +15,12 @@ exports.getCarsTypeById = async (req, res, next) => {
   if (!data) {
     throw new NotFoundError(`Cars Type not found`);
   }
-  successResponse(res, data);
+  successResponse(res, data, `Successfully fetched cars type`);
 };
 
 exports.addCarsType = async (req, res, next) => {
   const data = await carsTypeService.addCarsType(req.body);
-  successResponse(res, data);
+  successResponse(res, data, `Successfully added cars type`);
 };
 
 exports.updateCarsType = async (req, res, next) => {
@@ -31,7 +31,7 @@ exports.updateCarsType = async (req, res, next) => {
   if (!data) {
     throw new NotFoundError(`Type id not found`);
   }
-  successResponse(res, data);
+  successResponse(res, data, `Successfully updated cars type`);
 };
 
 exports.deleteCarsType = (req, res, next) => {
@@ -39,5 +39,5 @@ exports.deleteCarsType = (req, res, next) => {
   if (!data) {
     throw new NotFoundError(`Type id not found`);
   }
-  successResponse(res, data);
+  successResponse(res, data, `Successfully deleted cars type`);
 };
