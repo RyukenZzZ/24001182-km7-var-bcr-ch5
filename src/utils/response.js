@@ -1,3 +1,8 @@
-exports.successResponse = (res, data) => {
-  res.status(200).json({ success: true, data });
+// Standarize response
+exports.successResponse = (res, data, message = "Operation Successful") => {
+  res.status(200).json({
+      success: true,
+      message,
+      data,
+  });
 };
