@@ -18,7 +18,7 @@ exports.getCars = async () => {
   return JSONBigInt.parse(serializeData);
 };
 
-exports.getCarsByQuery = async (plate, manufacture) => {
+exports.getCarsByQuery = async (plate, manufacture_id,model_id,type_id) => {
   const searchedCars = await prisma.cars.findMany({
     where: {
       OR: [
@@ -27,10 +27,9 @@ exports.getCarsByQuery = async (plate, manufacture) => {
             contains: plate,
             mode: "insensitive",
           },
-          manufacture: {
-            contains: manufacture,
-            mode: "insensitive",
-          },
+          manufacture_id: manufacture_id,
+          model_id:model_id,
+          type_id:type_id
         },
       ],
     },
