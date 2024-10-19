@@ -1,5 +1,6 @@
 const { z } = require("zod");
 const { BadRequestError } = require("../utils/request");
+
 const validateParams = z.string();
 const validatePicture = z
   .object({
@@ -33,7 +34,14 @@ exports.validatePostCars = (req, res, next) => {
     rentPerDay: Number(req.body.rentPerDay),
     capacity: Number(req.body.capacity),
     year: Number(req.body.year),
+    options: req.body.options
+      ? req.body.options.split(",").map((opt) => opt.trim())
+      : [],
+    specs: req.body.specs
+      ? req.body.specs.split(",").map((spec) => spec.trim())
+      : [],
   };
+
   const validateBody = z.object({
     plate: z.string(),
     manufacture_id: z.number(),
@@ -46,17 +54,20 @@ exports.validatePostCars = (req, res, next) => {
     available: z.boolean(),
     type_id: z.number(),
     year: z.number(),
-    options: z.union([z.string(), z.array(z.string())]),
-    specs: z.union([z.string(), z.array(z.string())]),
+    options: z.array(z.string()).optional(),
+    specs: z.array(z.string()).optional(),
   });
+
   const resultValidateBody = validateBody.safeParse(req.parsedBody);
   if (!resultValidateBody.success) {
     throw new BadRequestError(resultValidateBody.error.errors);
   }
+
   const resultValidatePicture = validatePicture.safeParse(req.files);
   if (!resultValidatePicture.success) {
     throw new BadRequestError(resultValidatePicture.error.errors);
   }
+
   next();
 };
 
@@ -80,6 +91,12 @@ exports.validatePutCars = (req, res, next) => {
     ...(rentPerDay && { rentPerDay }),
     ...(capacity && { capacity }),
     ...(year && { year }),
+    options: req.body.options
+      ? req.body.options.split(",").map((opt) => opt.trim())
+      : [],
+    specs: req.body.specs
+      ? req.body.specs.split(",").map((spec) => spec.trim())
+      : [],
   };
 
   const validateUpdateBody = z.object({
@@ -94,14 +111,8 @@ exports.validatePutCars = (req, res, next) => {
     available: z.boolean().optional().nullable(),
     type_id: z.number().optional().nullable(),
     year: z.number().optional().nullable(),
-    options: z
-      .union([z.string(), z.array(z.string())])
-      .optional()
-      .nullable(),
-    specs: z
-      .union([z.string(), z.array(z.string())])
-      .optional()
-      .nullable(),
+    options: z.array(z.string()).optional(),
+    specs: z.array(z.string()).optional(),
   });
 
   const resultValidateParams = validateParams.safeParse(req.params.id);

@@ -1,24 +1,15 @@
-const cars = require("../../data/cars.json");
-const fs = require("fs");
-const { v4: uuidv4 } = require("uuid");
-const dataPath = "./data/cars.json";
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-// use `prisma` in your application to read and write data in your DB
-const JSONBigInt = require(`json-bigint`);
+const JSONBigInt = require("json-bigint");
 
 exports.getCars = async () => {
   const carsData = await prisma.cars.findMany({
     include: { manufactures: true, models: true, types: true },
   });
-  if (!carsData) {
-    return null;
-  }
-  const serializeData = JSONBigInt.stringify(carsData);
-  return JSONBigInt.parse(serializeData);
+  return JSONBigInt.parse(JSONBigInt.stringify(carsData));
 };
 
-exports.getCarsByQuery = async (plate, manufacture_id,model_id,type_id) => {
+exports.getCarsByQuery = async (plate, manufacture_id, model_id, type_id) => {
   const searchedCars = await prisma.cars.findMany({
     where: {
       OR: [
@@ -27,18 +18,14 @@ exports.getCarsByQuery = async (plate, manufacture_id,model_id,type_id) => {
             contains: plate,
             mode: "insensitive",
           },
-          manufacture_id: manufacture_id,
-          model_id:model_id,
-          type_id:type_id
+          manufacture_id,
+          model_id,
+          type_id,
         },
       ],
     },
   });
-  if (!searchedCars) {
-    return null;
-  }
-  const serializeData = JSONBigInt.stringify(searchedCars);
-  return JSONBigInt.parse(serializeData);
+  return JSONBigInt.parse(JSONBigInt.stringify(searchedCars));
 };
 
 exports.getCarsById = async (id) => {
@@ -47,28 +34,22 @@ exports.getCarsById = async (id) => {
       id: id,
     },
   });
-  if (!carsById) {
-    return null;
-  }
-  const serializeData = JSONBigInt.stringify(carsById);
-  return JSONBigInt.parse(serializeData);
+  return JSONBigInt.parse(JSONBigInt.stringify(carsById));
 };
 
 exports.addCars = async (data) => {
-  const newCars = await prisma.cars.createManyAndReturn({
+  const newCars = await prisma.cars.create({
     data,
   });
-  const serializeData = JSONBigInt.stringify(newCars);
-  return JSONBigInt.parse(serializeData);
+  return JSONBigInt.parse(JSONBigInt.stringify(newCars));
 };
 
 exports.updateCars = async (id, data) => {
-  const newCars = await prisma.cars.update({
+  const updatedCars = await prisma.cars.update({
     where: { id: Number(id) },
     data,
   });
-  const serializeData = JSONBigInt.stringify(newCars);
-  return JSONBigInt.parse(serializeData);
+  return JSONBigInt.parse(JSONBigInt.stringify(updatedCars));
 };
 
 exports.deleteCars = async (id) => {
@@ -77,6 +58,5 @@ exports.deleteCars = async (id) => {
       id: Number(id),
     },
   });
-  const serializeData = JSONBigInt.stringify(deletedCars);
-  return JSONBigInt.parse(serializeData);
+  return JSONBigInt.parse(JSONBigInt.stringify(deletedCars));
 };

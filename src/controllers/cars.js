@@ -1,44 +1,31 @@
 const carsService = require("../services/cars");
 const { successResponse } = require("../utils/response");
-const { NotFoundError } = require("../utils/request");
 
-exports.getCars = async (req, res, next) => {
+exports.getCars = async (req, res) => {
   const data = await carsService.getCars(req);
-  if (!data.length) {
-    throw new NotFoundError(`Cars data not found`);
-  }
-  successResponse(res, data, `Successfully fetched cars`);
+  return successResponse(res, data, "Cars fetched successfully");
 };
 
-exports.getCarsById = async (req, res, next) => {
+exports.getCarsById = async (req, res) => {
   const data = await carsService.getCarsById(req.params.id);
-  if (!data) {
-    throw new NotFoundError(`Cars not found`);
-  }
-  successResponse(res, data, `Successfully fetched cars`);
+  return successResponse(res, data, "Car fetched successfully");
 };
 
-exports.addCars = async (req, res, next) => {
-  const data = await carsService.addCars(req.parsedBody, req.files?.image);
-  successResponse(res, data, `Successfully added cars`);
+exports.addCars = async (req, res) => {
+  const data = await carsService.addCars(req.parsedBody, req.files);
+  return successResponse(res, data, "Car added successfully");
 };
 
-exports.updateCars = async (req, res, next) => {
+exports.updateCars = async (req, res) => {
   const data = await carsService.updateCars(
     req.params.id,
     req.parsedBody,
-    req.files?.image
+    req.files
   );
-  if (!data) {
-    throw new NotFoundError(`Cars id not found`);
-  }
-  successResponse(res, data, `Successfully updated cars`);
+  return successResponse(res, data, "Car updated successfully");
 };
 
-exports.deleteCars = async (req, res, next) => {
+exports.deleteCars = async (req, res) => {
   const data = await carsService.deleteCars(req.params.id);
-  if (!data) {
-    throw new NotFoundError(`Cars id not found`);
-  }
-  successResponse(res, data, `Successfully deleted cars`);
+  return successResponse(res, data, "Car deleted successfully");
 };
