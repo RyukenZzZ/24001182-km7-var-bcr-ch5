@@ -2,7 +2,7 @@ const carsRepository = require("../repositories/cars");
 const { imageUpload } = require("../utils/image-kit");
 
 exports.getCars = async (req) => {
-  return await Object.keys(req.query).length ? carsRepository.getCarsByQuery(req.query?.plate,req.query?.manufacture) : carsRepository.getCars();
+  return await Object.keys(req.query).length ? carsRepository.getCarsByQuery(req.query?.plate,req.query?.manufacture_id,req.query?.model_id,req.query?.type_id) : carsRepository.getCars();
 };
 
 exports.getCarsById = async (id) => {
