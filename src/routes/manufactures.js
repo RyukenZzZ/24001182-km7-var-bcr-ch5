@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const { authorization } = require("../middlewares/auth");
+const { adminRole, userRole } = require("../constants/auth");
 const {
   validateGetManufactures,
   validateGetManufactureById,
@@ -12,14 +14,14 @@ const manufacturesController = require("../controllers/manufactures");
 // Route definitions
 router
   .route("/")
-  .get(validateGetManufactures, manufacturesController.getManufactures)
-  .post(validateCreateManufacture, manufacturesController.createManufacture);
+  .get(authorization(adminRole, userRole),validateGetManufactures, manufacturesController.getManufactures)
+  .post(authorization(adminRole),validateCreateManufacture, manufacturesController.createManufacture);
 
 router
   .route("/:id")
-  .get(validateGetManufactureById, manufacturesController.getManufactureById)
-  .put(validateUpdateManufacture, manufacturesController.updateManufacture)
-  .delete(
+  .get(authorization(adminRole, userRole),validateGetManufactureById, manufacturesController.getManufactureById)
+  .put(authorization(adminRole),validateUpdateManufacture, manufacturesController.updateManufacture)
+  .delete(authorization(adminRole),
     validateDeleteManufactureById,
     manufacturesController.deleteManufactureById
   );

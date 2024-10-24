@@ -1,4 +1,6 @@
 const express = require("express");
+const { authorization } = require("../middlewares/auth");
+const { adminRole, userRole } = require("../constants/auth");
 const {
   validateGetParams,
   validatePostCars,
@@ -17,12 +19,12 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(validateGetQuery, getCars)
-  .post(validatePostCars, addCars);
+  .get(authorization(adminRole, userRole), validateGetQuery, getCars)
+  .post(authorization(adminRole),validatePostCars, addCars);
 router
   .route("/:id")
-  .get(validateGetParams, getCarsById)
-  .put(validatePutCars, updateCars)
-  .delete(validateGetParams, deleteCars);
+  .get(authorization(adminRole, userRole),validateGetParams, getCarsById)
+  .put(authorization(adminRole),validatePutCars, updateCars)
+  .delete(authorization(adminRole),validateGetParams, deleteCars);
 module.exports = router;
 

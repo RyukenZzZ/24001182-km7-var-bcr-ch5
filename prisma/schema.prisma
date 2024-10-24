@@ -53,3 +53,12 @@ model types {
   style          String? @db.VarChar(255)
   cars           cars[]
 }
+
+model users {
+  id              BigInt  @id(map: "users_pk") @unique(map: "users_id_idx") @default(autoincrement())
+  name            String  @db.VarChar
+  email           String  @unique(map: "users_email_idx") @db.VarChar
+  password        String  @db.VarChar
+  profile_picture String? @db.VarChar
+  role_id         Int     @default(2)
+}
