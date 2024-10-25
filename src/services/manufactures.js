@@ -5,8 +5,6 @@ exports.getManufactures = async (req) => {
   return Object.keys(req.query).length
     ? await manufactureRepository.getManufacturesByQuery(
         req.query.name,
-        req.query.characteristic,
-        req.query.style
       )
     : await manufactureRepository.getManufactures();
 };

@@ -26,6 +26,26 @@ exports.getManufactureById = async (id) => {
   return JSONBigInt.parse(serializedData);
 };
 
+exports.getManufacturesByQuery = async (name) => {
+  const carsManufactureData = await prisma.manufactures.findMany({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: name,
+            mode: "insensitive",
+          },
+        },
+      ],
+    },
+  });
+  if (!carsManufactureData) {
+    return null;
+  }
+  const serializeData = JSONBigInt.stringify(carsManufactureData);
+  return JSONBigInt.parse(serializeData);
+};
+
 // Create a new manufacture
 exports.createManufacture = async (data) => {
   const newManufacture = await prisma.manufactures.create({

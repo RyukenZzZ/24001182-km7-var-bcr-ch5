@@ -34,8 +34,8 @@ exports.updateCarsType = async (req, res, next) => {
   successResponse(res, data, `Successfully updated cars type`);
 };
 
-exports.deleteCarsType = (req, res, next) => {
-  const data = carsTypeService.deleteCarsType(req.params.id);
+exports.deleteCarsType =async (req, res, next) => {
+  const data = await carsTypeService.deleteCarsType(req.params.id);
   if (!data) {
     throw new NotFoundError(`Type id not found`);
   }
