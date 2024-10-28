@@ -1,5 +1,12 @@
-Ferdy chawnima = Cars & types
+Admin Role
 
-Bamaramzy Bamaramzy = Manufactures
+varrel@gmail.com
 
-Varrelino RyukenZzZ = Models
+pass : AWIKWOK
+
+
+User Role
+
+rivan@gmail.com
+
+pass : AWIKWOK
