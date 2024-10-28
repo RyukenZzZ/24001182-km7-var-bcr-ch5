@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const JSONBigInt = require("json-bigint");
+const { NotFoundError } = require("../utils/request");
 
 const prisma = new PrismaClient();
 
@@ -33,6 +34,13 @@ exports.getModelById = async (id) => {
 };
 
 exports.createModel = async (data) => {
+  const {manufacture_id} = data;
+
+  // Check if related IDs exist
+  const manufacture = await prisma.manufactures.findUnique({ where: { id: manufacture_id } });
+  if (!manufacture) throw new NotFoundError(`Manufacture with ID ${manufacture_id} not found`);
+
+
   const newModel = await prisma.models.create({
     data,
     include: {
@@ -44,6 +52,12 @@ exports.createModel = async (data) => {
 };
 
 exports.updateModel = async (id, data) => {
+  const {manufacture_id} = data;
+
+  // Check if related IDs exist
+  const manufacture = await prisma.manufactures.findUnique({ where: { id: manufacture_id } });
+  if (!manufacture) throw new NotFoundError(`Manufacture with ID ${manufacture_id} not found`);
+
   const updatedModel = await prisma.models.update({
     where: { id },
     data,

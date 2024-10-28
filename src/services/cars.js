@@ -1,5 +1,7 @@
 const carsRepository = require("../repositories/cars");
 const { imageUpload } = require("../utils/image-kit");
+const { NotFoundError } = require("../utils/request");
+
 
 exports.getCars = async (req) => {
   return Object.keys(req.query).length
@@ -13,6 +15,11 @@ exports.getCars = async (req) => {
 };
 
 exports.getCarsById = async (id) => {
+  const existingCar = await carsRepository.getCarsById(id);
+  if (!existingCar) {
+    throw new NotFoundError("Car not found!");
+  }
+  
   return carsRepository.getCarsById(id);
 };
 
@@ -26,6 +33,11 @@ exports.addCars = async (data, files) => {
 };
 
 exports.updateCars = async (id, data, files) => {
+  const existingCar = await carsRepository.getCarsById(id);
+  if (!existingCar) {
+    throw new NotFoundError("Car not found!");
+  }
+
   if (files && files.image) {
     data.image = await imageUpload(files.image);
   }
@@ -33,5 +45,10 @@ exports.updateCars = async (id, data, files) => {
 };
 
 exports.deleteCars = async (id) => {
+  const existingCar = await carsRepository.getCarsById(id);
+  if (!existingCar) {
+    throw new NotFoundError("Car not found!");
+  }
+
   return carsRepository.deleteCars(id);
 };
