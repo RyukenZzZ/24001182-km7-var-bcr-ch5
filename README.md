@@ -1,7 +1,9 @@
 Admin Role
 varrel@gmail.com
-AWIKWOK
+
+pass : AWIKWOK
 
 User Role
 rivan@gmail.com
-AWIKWOK
+
+pass : AWIKWOK
