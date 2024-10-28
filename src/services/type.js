@@ -27,6 +27,6 @@ exports.deleteCarsType = async (id) => {
   if (!existingType) {
   throw new NotFoundError("Type not found!");
   }
-  
+
   return carsTypeRepository.deleteCarsType(id);
 };
